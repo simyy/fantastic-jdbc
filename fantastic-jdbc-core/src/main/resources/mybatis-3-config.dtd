@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!ELEMENT configuration (properties?, dataSource?, mappers?)>
+
+<!ELEMENT properties (property*)>
+<!ATTLIST properties
+resource CDATA #IMPLIED
+url CDATA #IMPLIED
+>
+
+<!ELEMENT property EMPTY>
+<!ATTLIST property
+name CDATA #REQUIRED
+value CDATA #REQUIRED
+>
+
+<!ELEMENT dataSource (property*)>
+<!ATTLIST dataSource
+type CDATA #IMPLIED
+>
+
+<!ELEMENT mappers (mapper*,package*)>
+
+<!ELEMENT mapper EMPTY>
+<!ATTLIST mapper
+resource CDATA #IMPLIED
+url CDATA #IMPLIED
+class CDATA #IMPLIED
+>
+
+<!ELEMENT package EMPTY>
+<!ATTLIST package
+name CDATA #REQUIRED
+>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--<!DOCTYPE configuration>-->
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "mybatis-3-config.dtd">
+
+<configuration>
+
+    <properties resource="conf.properties">
+        <property name="project_name" value="fantastic-jdbc"/>
+    </properties>
+
+    <dataSource>
+        <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123"/>
+    </dataSource>
+
+    <mappers>
+        <mapper class="com.github.fantasticlab.jdbc.test.dao.UserMapper" resource="mappers/UserMapper.xml"/>
+    </mappers>
+
+</configuration>
+
+

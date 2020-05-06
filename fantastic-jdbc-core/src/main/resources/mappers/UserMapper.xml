@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.fantasticlab.jdbc.test.dao.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.github.fantasticlab.jdbc.test.bean.User">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+
+	<select id="getUser" resultType="com.github.fantasticlab.jdbc.test.bean.User">
+		select * from user where id = #{id}
+	</select>
+	
+	<select id="getAll" resultType="com.github.fantasticlab.jdbc.test.bean.User">
+		select * from user
+	</select>
+	
+	<update id="updateUser">
+		update user set name = '张三2' where id = #{id}
+	</update>
+	
+</mapper>
