@@ -25,7 +25,14 @@ public class Main {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         assert userMapper != null;
 
-        User user = userMapper.getUser(1l);
+        userMapper.getUser(1l);
+
+        User user = new User();
+        user.setName("test111");
+        Long id = userMapper.insert(user);
+        assert id != null;
+
+        user = userMapper.getUser(id);
         assert user != null;
 
     }

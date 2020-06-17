@@ -27,9 +27,11 @@ public class SimpleExecutor extends BaseExecutor {
     public int doUpdate(MappedStatement ms, Object parameter) throws SQLException {
         Statement stmt = null;
         try {
+            BoundSql boundSql = ms.getBoundSql(parameter);
             Configuration configuration = ms.getConfiguration();
             StatementHandler handler = configuration.newStatementHandler(
-                    this, ms, parameter, RowBounds.DEFAULT, null, null);
+                    this, ms, parameter, RowBounds.DEFAULT, null, boundSql);
+            stmt = prepareStatement(handler);
             return handler.update(stmt);
         } finally {
             closeStatement(stmt);

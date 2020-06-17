@@ -15,7 +15,6 @@
  */
 package com.github.fantasticlab.jdbc.xml.parsing;
 
-import com.github.fantasticlab.jdbc.io.Resources;
 import lombok.Data;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;

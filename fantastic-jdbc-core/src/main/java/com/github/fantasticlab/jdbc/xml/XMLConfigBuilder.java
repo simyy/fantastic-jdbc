@@ -22,21 +22,22 @@ public class XMLConfigBuilder {
     private XPathParser parser;
     private Configuration configuration;
 
-    public XMLConfigBuilder(Reader reader) {
-        this(reader, null);
-    }
+//    public XMLConfigBuilder(Reader reader) {
+//        this(reader, null);
+//    }
 
-    public XMLConfigBuilder(Reader reader, Properties props) {
-        this(new XPathParser(reader, true, props, new XMLMapperEntityResolver()), props);
-    }
+//    public XMLConfigBuilder(Reader reader, Properties props) {
+//        this(new XPathParser(reader, true, props, new XMLMapperEntityResolver()), props);
+//    }
 
     public XMLConfigBuilder(InputStream inputStream) {
-        this(inputStream, null);
+//        this(inputStream, null);
+        this(new XPathParser(inputStream, true, null, new XMLMapperEntityResolver()), null);
     }
 
-    public XMLConfigBuilder(InputStream inputStream, Properties props) {
-        this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), props);
-    }
+//    public XMLConfigBuilder(InputStream inputStream, Properties props) {
+//        this(new XPathParser(inputStream, true, props, new XMLMapperEntityResolver()), props);
+//    }
 
     private XMLConfigBuilder(XPathParser parser, Properties props) {
         this.configuration = new Configuration();

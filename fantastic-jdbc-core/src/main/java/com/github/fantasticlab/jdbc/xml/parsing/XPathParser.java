@@ -1,3 +1,18 @@
+/*
+ *    Copyright 2009-2012 the original author or authors.
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package com.github.fantasticlab.jdbc.xml.parsing;
 
 import com.github.fantasticlab.jdbc.io.Resources;
@@ -112,7 +127,6 @@ public class XPathParser {
         this.document = document;
     }
 
-    //17.设置Properties
     public void setVariables(Properties variables) {
         this.variables = variables;
     }
@@ -123,7 +137,6 @@ public class XPathParser {
 
     public String evalString(Object root, String expression) {
         String result = (String) evaluate(expression, root, XPathConstants.STRING);
-        // propertyParser解析token
         result = PropertyParser.parse(result, variables);
         return result;
     }
@@ -164,7 +177,6 @@ public class XPathParser {
         return evalFloat(document, expression);
     }
 
-    //??这里有点疑问，为何Float用evalString,Double用evaluate XPathConstants.NUMBER
     public Float evalFloat(Object root, String expression) {
         return Float.valueOf(evalString(root, expression));
     }
@@ -194,7 +206,6 @@ public class XPathParser {
         return evalNode(document, expression);
     }
 
-    //返回节点
     public XNode evalNode(Object root, String expression) {
         Node node = (Node) evaluate(expression, root, XPathConstants.NODE);
         if (node == null) {
@@ -214,7 +225,6 @@ public class XPathParser {
     private Document createDocument(InputSource inputSource) {
         // important: this must only be called AFTER common constructor
         try {
-            // 初始化dom解析工厂
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setValidating(validation);
             factory.setNamespaceAware(false);
@@ -224,8 +234,7 @@ public class XPathParser {
             factory.setExpandEntityReferences(true);
 
             DocumentBuilder builder = factory.newDocumentBuilder();
-            //需要注意的就是定义了EntityResolver(XMLMapperEntityResolver)，这样不用联网去获取DTD，
-            //将DTD放在org\apache\ibatis\builder\xml\mybatis-3-config.dtd,来达到验证xml合法性的目的
+            // 用于设置本地 mybatis-3-config.dtd
             builder.setEntityResolver(entityResolver);
             builder.setErrorHandler(new ErrorHandler() {
                 @Override
