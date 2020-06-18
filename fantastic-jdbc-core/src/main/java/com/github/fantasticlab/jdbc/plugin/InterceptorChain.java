@@ -19,8 +19,4 @@ public class InterceptorChain {
         interceptors.add(interceptor);
     }
 
-    public List<Interceptor> getInterceptors() {
-        return Collections.unmodifiableList(interceptors);
-    }
-
 }

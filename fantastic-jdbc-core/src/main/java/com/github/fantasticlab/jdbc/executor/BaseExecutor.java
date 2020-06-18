@@ -12,20 +12,14 @@ import java.util.List;
 
 public abstract class BaseExecutor implements Executor {
 
-    protected Transaction transaction;
     protected Configuration configuration;
-    protected Executor wrapper;
+    protected Transaction transaction;
     protected boolean closed;
-
-//  protected ConcurrentLinkedQueue<DeferredLoad> deferredLoads;
-//  protected PerpetualCache localCache;
-//  protected PerpetualCache localOutputParameterCache;
 
 
     protected BaseExecutor(Configuration configuration, Transaction transaction) {
         this.transaction = transaction;
         this.configuration = configuration;
-        this.wrapper = this;
         this.closed = false;
     }
 

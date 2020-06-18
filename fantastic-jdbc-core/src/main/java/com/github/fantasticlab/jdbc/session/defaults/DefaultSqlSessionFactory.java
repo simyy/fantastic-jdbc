@@ -3,12 +3,10 @@ package com.github.fantasticlab.jdbc.session.defaults;
 import com.github.fantasticlab.jdbc.executor.Executor;
 import com.github.fantasticlab.jdbc.session.*;
 import com.github.fantasticlab.jdbc.transaction.Transaction;
-import com.github.fantasticlab.jdbc.transaction.TransactionFactory;
-import com.github.fantasticlab.jdbc.transaction.jdbc.JdbcTransactionFactory;
+import com.github.fantasticlab.jdbc.transaction.JdbcTransaction;
 
 /**
  * DefaultSqlSessionFactory is a implement of SqlSessionFactory.
- *
  * In DefaultSqlSessionFactory, {@code Configuration} is an application context.
  */
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
@@ -21,9 +19,7 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
 
     @Override
     public SqlSession openSession(boolean autocommit) {
-        TransactionFactory transactionFactory = new JdbcTransactionFactory();
-        Transaction tx = transactionFactory.newTransaction(configuration.getDataSource(), TransactionIsolationLevel.READ_COMMITTED, autocommit);
-        final Executor executor = configuration.newExecutor(tx);
-        return new DefaultSqlSession(this.configuration, executor);
+        Transaction tx = new JdbcTransaction(configuration.getDataSource(), TransactionIsolationLevel.READ_COMMITTED, autocommit);
+        return new DefaultSqlSession(this.configuration, configuration.FACTORY.newExecutor(tx));
     }
 }

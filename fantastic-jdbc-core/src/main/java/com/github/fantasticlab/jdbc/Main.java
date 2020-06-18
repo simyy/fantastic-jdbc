@@ -7,6 +7,8 @@ import com.github.fantasticlab.jdbc.session.SqlSessionFactoryBuilder;
 import com.github.fantasticlab.jdbc.test.bean.User;
 import com.github.fantasticlab.jdbc.test.dao.UserMapper;
 
+import java.util.List;
+
 /**
  * Hello world!
  *
@@ -34,6 +36,9 @@ public class Main {
 
         user = userMapper.getUser(id);
         assert user != null;
+
+        List<User> users = userMapper.getAll();
+        assert users != null;
 
     }
 }

@@ -5,7 +5,7 @@ import com.github.fantasticlab.jdbc.io.Resources;
 import com.github.fantasticlab.jdbc.mapping.ResultFlag;
 import com.github.fantasticlab.jdbc.mapping.ResultMapping;
 import com.github.fantasticlab.jdbc.session.Configuration;
-import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
+import com.github.fantasticlab.jdbc.executor.type.JdbcType;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
 import com.github.fantasticlab.jdbc.xml.parsing.XPathParser;

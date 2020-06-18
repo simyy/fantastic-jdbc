@@ -20,7 +20,9 @@ import java.sql.Statement;
 public abstract class BaseStatementHandler implements StatementHandler {
 
     protected Configuration configuration;
+    /* Process ResultSet from DB */
     protected ResultSetHandler resultSetHandler;
+    /* Process Parameter from Input */
     protected ParameterHandler parameterHandler;
 
     protected Executor executor;
@@ -42,11 +44,8 @@ public abstract class BaseStatementHandler implements StatementHandler {
         this.rowBounds = rowBounds;
         this.boundSql = boundSql;
 
-//    this.typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-//    this.objectFactory = configuration.getObjectFactory();
-
         this.parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
-        this.resultSetHandler = configuration.newResultSetHandler(executor, mappedStatement, rowBounds, parameterHandler, resultHandler, boundSql);
+        this.resultSetHandler = configuration.newResultSetHandler(mappedStatement);
     }
 
     @Override

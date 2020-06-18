@@ -3,10 +3,8 @@ package com.github.fantasticlab.jdbc.xml;
 import com.github.fantasticlab.jdbc.executor.keygen.KeyGenerator;
 import com.github.fantasticlab.jdbc.mapping.*;
 import com.github.fantasticlab.jdbc.reflection.MetaClass;
-import com.github.fantasticlab.jdbc.scripting.LanguageDriver;
 import com.github.fantasticlab.jdbc.session.Configuration;
-import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
-import com.github.fantasticlab.jdbc.transaction.type.TypeHandler;
+import com.github.fantasticlab.jdbc.executor.type.JdbcType;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
 
 import java.util.*;
@@ -76,18 +74,18 @@ public class MapperBuilderAssistant extends BaseBuilder {
                                    Class<?> parameterType,
                                    Class<?> resultType,
                                    KeyGenerator keyGenerator) {
-        // package_prefix.sql_id
+        /* Apply format as "namespace.id", such as com.github.fantasticlab.jdbc.test.bean.User.insert */
         id = applyCurrentNamespace(id, false);
         MappedStatement.Builder statementBuilder = new MappedStatement.Builder(
                 configuration, id, sqlSource, sqlCommandType);
         statementBuilder.resource(resource);
         statementBuilder.keyGenerator(keyGenerator);
+        /* Set Parameter of Statement */
         setStatementParameterMap(parameterType, statementBuilder);
+        /* Set ResultType of Statement */
         setStatementResultType(resultType, statementBuilder);
-
-        MappedStatement mappedStatement = statementBuilder.build();
-        mappedStatement.setLang(configuration.getLanguageRegistry().getDefaultDriver());
-        configuration.addMappedStatement(mappedStatement);
+        /* Add MappedStatement */
+        configuration.addMappedStatement(statementBuilder.build());
     }
 
     private void setStatementParameterMap(Class<?> parameterTypeClass,

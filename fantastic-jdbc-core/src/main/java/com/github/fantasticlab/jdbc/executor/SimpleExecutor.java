@@ -29,7 +29,7 @@ public class SimpleExecutor extends BaseExecutor {
         try {
             BoundSql boundSql = ms.getBoundSql(parameter);
             Configuration configuration = ms.getConfiguration();
-            StatementHandler handler = configuration.newStatementHandler(
+            StatementHandler handler = configuration.FACTORY.newStatementHandler(
                     this, ms, parameter, RowBounds.DEFAULT, null, boundSql);
             stmt = prepareStatement(handler);
             return handler.update(stmt);
@@ -44,7 +44,7 @@ public class SimpleExecutor extends BaseExecutor {
         try {
             BoundSql boundSql = ms.getBoundSql(parameter);
             Configuration configuration = ms.getConfiguration();
-            StatementHandler handler = configuration.newStatementHandler(this, ms, parameter, rowBounds, resultHandler, boundSql);
+            StatementHandler handler = configuration.FACTORY.newStatementHandler(this, ms, parameter, rowBounds, resultHandler, boundSql);
             stmt = prepareStatement(handler);
             return handler.<E>query(stmt, resultHandler);
         } finally {

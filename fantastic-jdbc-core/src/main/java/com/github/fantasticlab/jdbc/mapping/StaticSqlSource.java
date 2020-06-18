@@ -5,11 +5,11 @@ import com.github.fantasticlab.jdbc.session.Configuration;
 import java.util.List;
 
 /**
- * 静态SQL
+ * StaticSqlSource is
  */
 public class StaticSqlSource implements SqlSource {
 
-    // SQL源码 参数用?替代
+
     private String sql;
     // 参数列表
     private List<ParameterMapping> parameterMappings;
@@ -27,7 +27,7 @@ public class StaticSqlSource implements SqlSource {
 
     @Override
     public BoundSql getBoundSql(Object parameterObject) {
-        return new BoundSql(configuration, sql, parameterMappings, parameterObject);
+        return new BoundSql(sql, parameterMappings, parameterObject);
     }
 
 }

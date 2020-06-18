@@ -1,9 +1,9 @@
 package com.github.fantasticlab.jdbc.mapping;
 
 import com.github.fantasticlab.jdbc.session.Configuration;
-import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
-import com.github.fantasticlab.jdbc.transaction.type.TypeHandler;
-import com.github.fantasticlab.jdbc.transaction.type.TypeHandlerRegistry;
+import com.github.fantasticlab.jdbc.executor.type.JdbcType;
+import com.github.fantasticlab.jdbc.executor.type.TypeHandler;
+import com.github.fantasticlab.jdbc.executor.type.TypeHandlerRegistry;
 import lombok.Getter;
 
 import java.sql.ResultSet;

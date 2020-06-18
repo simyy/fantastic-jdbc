@@ -18,11 +18,12 @@ import com.github.fantasticlab.jdbc.reflection.factory.DefaultObjectFactory;
 import com.github.fantasticlab.jdbc.reflection.factory.ObjectFactory;
 import com.github.fantasticlab.jdbc.reflection.wrapper.DefaultObjectWrapperFactory;
 import com.github.fantasticlab.jdbc.reflection.wrapper.ObjectWrapperFactory;
-import com.github.fantasticlab.jdbc.scripting.LanguageDriverRegistry;
+import com.github.fantasticlab.jdbc.scripting.LanguageDriver;
+import com.github.fantasticlab.jdbc.scripting.XMLLanguageDriver;
 import com.github.fantasticlab.jdbc.transaction.Transaction;
-import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
-import com.github.fantasticlab.jdbc.transaction.type.TypeAliasRegistry;
-import com.github.fantasticlab.jdbc.transaction.type.TypeHandlerRegistry;
+import com.github.fantasticlab.jdbc.executor.type.JdbcType;
+import com.github.fantasticlab.jdbc.executor.type.TypeAliasRegistry;
+import com.github.fantasticlab.jdbc.executor.type.TypeHandlerRegistry;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
 import lombok.Data;
 
@@ -37,6 +38,11 @@ import java.util.*;
 @Data
 public class Configuration {
 
+    public Factory FACTORY = new Factory(this);
+
+    /* XML LanguageDriver */
+    protected LanguageDriver languageDriver = new XMLLanguageDriver();
+
     /* Global Variables */
     protected Properties variables = new Properties();
 
@@ -49,6 +55,9 @@ public class Configuration {
     /* Mapped Statement Storage */
     protected Map<String, MappedStatement> mappedStatements = new HashMap<>();
 
+    /* Interceptor Chain */
+    private InterceptorChain interceptorChain = new InterceptorChain();
+
 
     // 对象工厂
     protected ObjectFactory objectFactory = new DefaultObjectFactory();
@@ -60,16 +69,10 @@ public class Configuration {
     // 类型处理注册器
     protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
 
-    // 语言注册器
-    protected final LanguageDriverRegistry languageRegistry = new LanguageDriverRegistry();
-
     // 结果映射
     protected final Map<String, ResultMap> resultMaps = new HashMap<>();
     // 参数映射
     protected final Map<String, ParameterMap> parameterMaps = new HashMap<>();
-
-    // 拦截器链
-    private InterceptorChain interceptorChain = new InterceptorChain();
     // 数据源
     private DataSource dataSource;
     protected Integer defaultStatementTimeout;
@@ -98,48 +101,60 @@ public class Configuration {
         mappedStatements.put(ms.getId(), ms);
     }
 
-
-
-
-
-
-
-
-    public StatementHandler newStatementHandler(Executor executor,
-                                                MappedStatement mappedStatement,
-                                                Object parameterObject,
-                                                RowBounds rowBounds,
-                                                ResultHandler resultHandler,
-                                                BoundSql boundSql) {
-
-        StatementHandler statementHandler = new RoutingStatementHandler(
-                executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
-        return (StatementHandler) interceptorChain.pluginAll(statementHandler);
+    public MappedStatement getMappedStatement(String id) {
+        return mappedStatements.getOrDefault(id, null);
     }
+
+    /* Configuration Factory */
+    public static class Factory {
+
+        private Configuration configuration;
+
+        public Factory(Configuration configuration) {
+            this.configuration = configuration;
+        }
+
+        /* Init a Executor */
+        public Executor newExecutor(Transaction transaction) {
+            Executor executor = new SimpleExecutor(configuration, transaction);
+            return (Executor) configuration.interceptorChain.pluginAll(executor);
+        }
+
+        /* Init a StatementHandler */
+        public StatementHandler newStatementHandler(Executor executor,
+                                                    MappedStatement mappedStatement,
+                                                    Object parameterObject,
+                                                    RowBounds rowBounds,
+                                                    ResultHandler resultHandler,
+                                                    BoundSql boundSql) {
+
+            StatementHandler statementHandler = new RoutingStatementHandler(
+                    executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+            return (StatementHandler) configuration.interceptorChain.pluginAll(statementHandler);
+        }
+    }
+
+
+
+
+
+
+
+
 
     public ParameterHandler newParameterHandler(MappedStatement mappedStatement,
                                                 Object parameterObject,
                                                 BoundSql boundSql) {
 
-        ParameterHandler parameterHandler = mappedStatement
-                .getLang()
-                .createParameterHandler(mappedStatement, parameterObject, boundSql);
+        ParameterHandler parameterHandler = languageDriver.createParameterHandler(mappedStatement, parameterObject, boundSql);
         return (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
     }
 
-    //创建结果集处理器
-    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
-                                                ResultHandler resultHandler, BoundSql boundSql) {
-        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+    public ResultSetHandler newResultSetHandler(MappedStatement mappedStatement) {
+        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(mappedStatement);
         return resultSetHandler;
     }
 
-    public MappedStatement getMappedStatement(String id) {
-        MappedStatement ms =  mappedStatements.getOrDefault(id, null);
-        // 临时兼容
-        ms.setLang(languageRegistry.getDefaultDriver());
-        return ms;
-    }
 
     public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
         return mapperRegistry.getMapper(type, sqlSession);
@@ -153,12 +168,6 @@ public class Configuration {
         return mappedStatements.containsKey(statementName);
     }
 
-    public Executor newExecutor(Transaction transaction) {
-        Executor executor;
-        executor = new SimpleExecutor(this, transaction);
-        executor = (Executor) interceptorChain.pluginAll(executor);
-        return executor;
-    }
 
     public void addParameterMap(ParameterMap pm) {
         parameterMaps.put(pm.getId(), pm);

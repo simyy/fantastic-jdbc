@@ -14,6 +14,6 @@ public interface LanguageDriver {
 
     ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql);
 
-    SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType);
+    SqlSource createSqlSource(Configuration configuration, XNode context, Class<?> parameterType);
 
 }

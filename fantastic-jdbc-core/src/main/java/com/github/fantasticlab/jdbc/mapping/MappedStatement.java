@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 映射语句
- */
 @Slf4j
 public final class MappedStatement {
 
@@ -137,7 +134,7 @@ public final class MappedStatement {
         //剩下的可以暂时忽略
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
         if (parameterMappings == null || parameterMappings.isEmpty()) {
-            boundSql = new BoundSql(configuration, boundSql.getSql(), parameterMap.getParameterMappings(), parameterObject);
+            boundSql = new BoundSql(boundSql.getSql(), parameterMap.getParameterMappings(), parameterObject);
         }
 
         // check for nested result maps in parameter mappings (issue #30)

@@ -17,7 +17,7 @@ package com.github.fantasticlab.jdbc.scripting.xmltags;
 
 import com.github.fantasticlab.jdbc.mapping.SqlSource;
 import com.github.fantasticlab.jdbc.scripting.DynamicSqlSource;
-import com.github.fantasticlab.jdbc.scripting.defaults.RawSqlSource;
+import com.github.fantasticlab.jdbc.scripting.RawSqlSource;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.xml.BaseBuilder;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
@@ -31,10 +31,6 @@ import java.util.Map;
 
 /**
  * @author Clinton Begin
- */
-
-/**
- * XML脚本构建器
  */
 public class XMLScriptBuilder extends BaseBuilder {
 

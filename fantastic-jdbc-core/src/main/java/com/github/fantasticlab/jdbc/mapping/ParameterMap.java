@@ -1,14 +1,11 @@
 package com.github.fantasticlab.jdbc.mapping;
 
-import com.github.fantasticlab.jdbc.session.Configuration;
 import lombok.Getter;
 
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 参数映射组
- */
+
 @Getter
 public class ParameterMap {
 

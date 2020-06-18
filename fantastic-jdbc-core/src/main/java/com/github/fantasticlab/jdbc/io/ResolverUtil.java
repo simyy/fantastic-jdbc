@@ -1,6 +1,6 @@
 package com.github.fantasticlab.jdbc.io;
 
-import com.github.fantasticlab.jdbc.transaction.type.TypeHandler;
+import com.github.fantasticlab.jdbc.executor.type.TypeHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -260,7 +260,7 @@ public class ResolverUtil<T> {
     public static void main(String[] args) {
 
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<Class<?>>();
-        resolverUtil.find(new ResolverUtil.IsA(TypeHandler.class), "com.github.fantasticlab.jdbc.transaction.type");
+        resolverUtil.find(new ResolverUtil.IsA(TypeHandler.class), "com.github.fantasticlab.jdbc.executor.type");
         Set<Class<? extends Class<?>>> handlerSet = resolverUtil.getClasses();
         assert handlerSet != null;
 

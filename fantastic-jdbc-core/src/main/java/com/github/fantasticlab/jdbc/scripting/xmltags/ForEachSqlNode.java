@@ -25,11 +25,6 @@ import java.util.Map;
 /**
  * @author Clinton Begin
  */
-
-/**
- * foreach SQL节点
- * TODO
- */
 public class ForEachSqlNode implements SqlNode {
     public static final String ITEM_PREFIX = "__frch_";
 
@@ -58,7 +53,7 @@ public class ForEachSqlNode implements SqlNode {
     @Override
     public boolean apply(DynamicContext context) {
         Map<String, Object> bindings = context.getBindings();
-        //解析collectionExpression->iterable,核心用的ognl
+        // ognl
         final Iterable<?> iterable = evaluator.evaluateIterable(collectionExpression, bindings);
         if (!iterable.iterator().hasNext()) {
             return true;

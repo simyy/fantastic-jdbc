@@ -1,6 +1,7 @@
 package com.github.fantasticlab.jdbc.scripting;
 
 
+import com.github.fantasticlab.jdbc.executor.parameter.DefaultParameterHandler;
 import com.github.fantasticlab.jdbc.executor.parameter.ParameterHandler;
 import com.github.fantasticlab.jdbc.mapping.BoundSql;
 import com.github.fantasticlab.jdbc.mapping.MappedStatement;
@@ -20,8 +21,8 @@ public class XMLLanguageDriver implements LanguageDriver {
     }
 
     @Override
-    public SqlSource createSqlSource(Configuration configuration, XNode script, Class<?> parameterType) {
-        XMLScriptBuilder builder = new XMLScriptBuilder(configuration, script, parameterType);
+    public SqlSource createSqlSource(Configuration configuration, XNode context, Class<?> parameterType) {
+        XMLScriptBuilder builder = new XMLScriptBuilder(configuration, context, parameterType);
         return builder.parseScriptNode();
     }
 

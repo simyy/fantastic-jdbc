@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 public interface ParameterHandler {
 
-  Object getParameterObject();
+    Object getParameterObject();
 
-  void setParameters(PreparedStatement ps) throws SQLException;
+    void setParameters(PreparedStatement ps) throws SQLException;
 
 }

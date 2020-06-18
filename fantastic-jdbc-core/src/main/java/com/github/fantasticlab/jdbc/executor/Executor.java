@@ -8,6 +8,10 @@ import com.github.fantasticlab.jdbc.transaction.Transaction;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * {@code MappedStatement} Executor,
+ * contains basic execute and transaction operate.
+ */
 public interface Executor {
 
     int update(MappedStatement ms, Object parameter) throws SQLException;

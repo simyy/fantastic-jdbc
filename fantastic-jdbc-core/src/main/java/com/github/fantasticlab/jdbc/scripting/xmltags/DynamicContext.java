@@ -38,14 +38,8 @@ public class DynamicContext {
     public static final String DATABASE_ID_KEY = "_databaseId";
 
     static {
-        //TODO OgnlRuntime
-        //定义属性->getter方法映射，ContextMap到ContextAccessor的映射，注册到ognl运行时
-        //参考http://commons.apache.org/proper/commons-ognl/developer-guide.html
+        /* Ognl */
         OgnlRuntime.setPropertyAccessor(ContextMap.class, new ContextAccessor());
-        //将传入的参数对象统一封装为ContextMap对象（继承了HashMap对象），
-        //然后Ognl运行时环境在动态计算sql语句时，
-        //会按照ContextAccessor中描述的Map接口的方式来访问和读取ContextMap对象，获取计算过程中需要的参数。
-        //ContextMap对象内部可能封装了一个普通的POJO对象，也可以是直接传递的Map对象，当然从外部是看不出来的，因为都是使用Map的接口来读取数据。
     }
 
     private final ContextMap bindings;
@@ -90,7 +84,6 @@ public class DynamicContext {
         return uniqueNumber++;
     }
 
-    //上下文map，静态内部类
     static class ContextMap extends HashMap<String, Object> {
         private static final long serialVersionUID = 2977601501966151582L;
 
@@ -119,24 +112,21 @@ public class DynamicContext {
         }
     }
 
-    //上下文访问器，静态内部类,实现OGNL的PropertyAccessor
+    /* ContextAccessor is a implement of PropertyAccessor */
     static class ContextAccessor implements PropertyAccessor {
 
         @Override
         public Object getProperty(Map context, Object target, Object name)
                 throws OgnlException {
             Map map = (Map) target;
-
             Object result = map.get(name);
             if (result != null) {
                 return result;
             }
-
             Object parameterObject = map.get(PARAMETER_OBJECT_KEY);
             if (parameterObject instanceof Map) {
                 return ((Map) parameterObject).get(name);
             }
-
             return null;
         }
 

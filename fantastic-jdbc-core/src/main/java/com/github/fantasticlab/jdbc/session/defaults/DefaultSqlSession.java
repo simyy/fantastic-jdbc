@@ -4,15 +4,15 @@ import com.github.fantasticlab.jdbc.exceptions.TooManyResultsException;
 import com.github.fantasticlab.jdbc.executor.Executor;
 import com.github.fantasticlab.jdbc.executor.ExecutorException;
 import com.github.fantasticlab.jdbc.mapping.MappedStatement;
-import com.github.fantasticlab.jdbc.session.Configuration;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
-import com.github.fantasticlab.jdbc.session.RowBounds;
-import com.github.fantasticlab.jdbc.session.SqlSession;
+import com.github.fantasticlab.jdbc.session.*;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * DefaultSqlSession use {@code Executor} to implement specific functions.
+ */
 public class DefaultSqlSession implements SqlSession {
 
     private Configuration configuration;
@@ -41,7 +41,6 @@ public class DefaultSqlSession implements SqlSession {
     public <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds) {
         try {
             MappedStatement ms = configuration.getMappedStatement(statement);
-            //转而用执行器来查询结果,注意这里传入的ResultHandler是null
             return executor.query(ms, wrapCollection(parameter), rowBounds, null);
         } catch (Exception e) {
             throw new ExecutorException("Error querying database.  Cause: " + e, e);

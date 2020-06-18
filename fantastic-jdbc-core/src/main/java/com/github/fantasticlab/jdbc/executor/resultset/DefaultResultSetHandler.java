@@ -1,6 +1,7 @@
 package com.github.fantasticlab.jdbc.executor.resultset;
 
 
+import com.github.fantasticlab.jdbc.exceptions.ResultSetException;
 import com.github.fantasticlab.jdbc.executor.Executor;
 import com.github.fantasticlab.jdbc.executor.parameter.ParameterHandler;
 import com.github.fantasticlab.jdbc.mapping.*;
@@ -16,27 +17,17 @@ import java.util.*;
 
 
 /**
- * 默认Map结果处理器
+ * DefaultResultSetHandler is the default result handler.
  */
 public class DefaultResultSetHandler implements ResultSetHandler {
 
-    private Executor executor;
     private MappedStatement mappedStatement;
-    private ParameterHandler parameterHandler;
-    private ResultHandler resultHandler;
-    private BoundSql boundSql;
-    private RowBounds rowBounds;
 
     public DefaultResultSetHandler() {
     }
 
-    public DefaultResultSetHandler(Executor executor, MappedStatement mappedStatement, ParameterHandler parameterHandler, ResultHandler resultHandler, BoundSql boundSql, RowBounds rowBounds) {
-        this.executor = executor;
+    public DefaultResultSetHandler(MappedStatement mappedStatement) {
         this.mappedStatement = mappedStatement;
-        this.parameterHandler = parameterHandler;
-        this.resultHandler = resultHandler;
-        this.boundSql = boundSql;
-        this.rowBounds = rowBounds;
     }
 
     @Override
@@ -49,48 +40,32 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     public <E> List<E> handleResultSets(Statement stmt, Class<E> clazz) throws SQLException {
         try
         {
-
             List<E> result = new ArrayList<>();
             ResultSet resultSet = stmt.getResultSet();
-            if (null == resultSet)
-            {
+            if (null == resultSet) {
                 return null;
             }
-
-            while (resultSet.next())
-            {
-                // 通过反射实例化返回类
+            while (resultSet.next()) {
                 E entity = (E) clazz.newInstance();
                 Field[] declaredFields = clazz.getDeclaredFields();
 
-                for (Field field : declaredFields)
-                {
-                    // 对成员变量赋值
+                for (Field field : declaredFields) {
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
-
-                    // 目前只实现了string和int转换
-                    if (String.class.equals(fieldType))
-                    {
+                    /* Only implement the type of string and int, others TODO */
+                    if (String.class.equals(fieldType)) {
                         field.set(entity, resultSet.getString(field.getName()));
-                    }
-                    else if (int.class.equals(fieldType) || Integer.class.equals(fieldType))
-                    {
+                    } else if (int.class.equals(fieldType) || Integer.class.equals(fieldType)) {
                         field.set(entity, resultSet.getInt(field.getName()));
-                    }
-                    else
-                    {
-                        // 其他类型自己转换，这里就直接设置了
+                    } else {
                         field.set(entity, resultSet.getObject(field.getName()));
                     }
                 }
                 result.add(entity);
             }
             return result;
-
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new ResultSetException("HandleResultSets error cause:" + e);
         }
-        return null;
     }
 }

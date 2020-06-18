@@ -27,12 +27,10 @@ public class SimpleStatementHandler extends BaseStatementHandler {
         super(executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
     }
 
-
     @Override
     protected Statement instantiateStatement(Connection connection) throws SQLException {
         return connection.createStatement();
     }
-
 
     @Override
     public void parameterize(Statement statement) throws SQLException {

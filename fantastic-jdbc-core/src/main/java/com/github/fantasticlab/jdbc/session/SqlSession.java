@@ -5,7 +5,7 @@ import java.util.List;
 
 
 /**
- * <code>SqlSession</code> is the main interface for mybatis.
+ * SqlSession is a SQL request manager.
  */
 public interface SqlSession {
 

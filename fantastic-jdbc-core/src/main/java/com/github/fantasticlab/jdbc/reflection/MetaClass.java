@@ -29,10 +29,6 @@ import java.util.Collection;
 /**
  * @author Clinton Begin
  */
-
-/**
- * 原类
- */
 public class MetaClass {
 
     private Reflector reflector;

@@ -3,6 +3,9 @@ package com.github.fantasticlab.jdbc.transaction;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Transaction Interface is a connection manager.
+ */
 public interface Transaction {
 
     Connection getConnection() throws SQLException;

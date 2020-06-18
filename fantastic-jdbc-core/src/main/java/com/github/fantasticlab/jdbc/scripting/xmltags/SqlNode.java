@@ -18,10 +18,6 @@ package com.github.fantasticlab.jdbc.scripting.xmltags;
 /**
  * @author Clinton Begin
  */
-/**
- * SQL节点（choose|foreach|if|）
- *
- */
 public interface SqlNode {
-  boolean apply(DynamicContext context);
+    boolean apply(DynamicContext context);
 }

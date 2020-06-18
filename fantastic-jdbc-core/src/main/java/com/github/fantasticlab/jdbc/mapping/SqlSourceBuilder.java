@@ -1,9 +1,7 @@
 package com.github.fantasticlab.jdbc.mapping;
 
 import com.github.fantasticlab.jdbc.reflection.MetaClass;
-import com.github.fantasticlab.jdbc.reflection.MetaObject;
 import com.github.fantasticlab.jdbc.session.Configuration;
-import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
 import com.github.fantasticlab.jdbc.xml.BaseBuilder;
 import com.github.fantasticlab.jdbc.xml.parsing.GenericTokenParser;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * SQL源码构建器
+ * SqlSourceBuilder is a builder for {@code SqlSource}.
  */
 public class SqlSourceBuilder extends BaseBuilder {
 
@@ -24,9 +22,8 @@ public class SqlSourceBuilder extends BaseBuilder {
         super(configuration);
     }
 
-    public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
-        ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
-        // 普通记号解析器，处理#{}参数
+    public SqlSource parse(String originalSql, Class<?> parameterType) {
+        ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType);
         GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
         String sql = parser.parse(originalSql);
         // 处理结束返回静态SQL
@@ -38,14 +35,11 @@ public class SqlSourceBuilder extends BaseBuilder {
 
         private List<ParameterMapping> parameterMappings = new ArrayList<ParameterMapping>();
         private Class<?> parameterType;
-        private MetaObject metaParameters;
 
         public ParameterMappingTokenHandler(Configuration configuration,
-                                            Class<?> parameterType,
-                                            Map<String, Object> additionalParameters) {
+                                            Class<?> parameterType) {
             super(configuration);
             this.parameterType = parameterType;
-            this.metaParameters = configuration.newMetaObject(additionalParameters);
         }
 
         public List<ParameterMapping> getParameterMappings() {
@@ -102,16 +96,6 @@ public class SqlSourceBuilder extends BaseBuilder {
                 }
             }
             return builder.build();
-        }
-
-        private Map<String, String> parseParameterMapping(String content) {
-            try {
-                return new ParameterExpression(content);
-            } catch (ParsingException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                throw new ParsingException("Parsing error was found in mapping #{" + content + "}.  Check syntax #{property|(expression), var1=value1, var2=value2, ...} ", ex);
-            }
         }
     }
 
