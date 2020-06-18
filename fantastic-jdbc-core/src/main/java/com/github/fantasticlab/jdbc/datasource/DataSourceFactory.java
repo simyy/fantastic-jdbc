@@ -7,8 +7,6 @@ import java.util.Properties;
 
 public interface DataSourceFactory {
 
-    void setProperties(Properties props) throws SQLException;
-
     DataSource getDataSource();
 
 }

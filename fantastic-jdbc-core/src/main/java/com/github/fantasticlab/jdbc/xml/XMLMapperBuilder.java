@@ -2,13 +2,10 @@
 package com.github.fantasticlab.jdbc.xml;
 
 import com.github.fantasticlab.jdbc.io.Resources;
-import com.github.fantasticlab.jdbc.mapping.ParameterMapping;
 import com.github.fantasticlab.jdbc.mapping.ResultFlag;
-import com.github.fantasticlab.jdbc.mapping.ResultMap;
 import com.github.fantasticlab.jdbc.mapping.ResultMapping;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
-import com.github.fantasticlab.jdbc.transaction.type.TypeHandler;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
 import com.github.fantasticlab.jdbc.xml.parsing.XPathParser;
@@ -19,33 +16,33 @@ import java.util.*;
 
 
 /**
- * XML映射构建器
+ * XMLMapperBuilder is a XML Mapper parser,
+ * which use {@code XPathParser} to resolve XML.
  */
 public class XMLMapperBuilder extends BaseBuilder {
 
+    /* Mapper.xml */
     private String resource;
     private XPathParser parser;
+    /* Sql fragment map in Mapper.xml.  Key is id, and value is SQL fragment. */
     private Map<String, XNode> sqlFragments;
     private MapperBuilderAssistant builderAssistant;
 
 
     public XMLMapperBuilder(Configuration configuration, String resource) throws IOException {
-
         super(configuration);
         this.resource = resource;
         this.sqlFragments = configuration.getSqlFragments();
+
+
         this.builderAssistant = new MapperBuilderAssistant(configuration, resource);;
         InputStream inputStream = Resources.getResourceAsStream(resource);
         this.parser = new XPathParser(inputStream, true,
                 configuration.getVariables(), new XMLMapperEntityResolver());
     }
 
-    //解析
     public void parse() {
-        // 配置Mapper
         configurationElement(parser.evalNode("/mapper"));
-        // 标记已加载
-        configuration.addLoadedResource(resource);
         // 绑定映射器到namespace
         bindMapperForNamespace();
     }
@@ -54,35 +51,48 @@ public class XMLMapperBuilder extends BaseBuilder {
         return sqlFragments.get(refid);
     }
 
-//	<mapper namespace="org.mybatis.example.BlogMapper">
-//	  <select id="selectBlog" parameterType="int" resultType="Blog">
-//	    select * from Blog where id = #{id}
-//	  </select>
-//	</mapper>
+    // Parse Mapper
+    // ------------------------------------------
+    // <mapper namespace="org.mybatis.example.BlogMapper">
+    //   <select id="selectBlog" parameterType="int" resultType="Blog">
+    //     select * from Blog where id = #{id}
+    //   </select>
+    // </mapper>
+    // ------------------------------------------
     private void configurationElement(XNode context) {
+        if (context == null) {
+            throw new ParsingException("Need one mapper element!");
+        }
         try {
             String namespace = context.getStringAttribute("namespace");
             if ("".equals(namespace)) {
                 throw new ParsingException("Mapper's namespace cannot be empty");
             }
             builderAssistant.setCurrentNamespace(namespace);
-            // 配置resultMap
+            // ResultMap Parse
             resultMapElements(context.evalNodes("/mapper/resultMap"));
-            // 配置sql(定义可重用的 SQL 代码段)
-            sqlElement(context.evalNodes("/mapper/sql"));
-            // 配置select|insert|update|delete
-            buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
+            // SqlFragment Parse
+            sqlElements(context.evalNodes("/mapper/sql"));
+            // SQL parse
+            statementElements(context.evalNodes("select|insert|update|delete"));
         } catch (Exception e) {
             throw new ParsingException("Error parsing Mapper XML. Cause: " + e, e);
         }
     }
 
-
-    // 配置select|insert|update|delete
-    private void buildStatementFromContext(List<XNode> list) {
+    // Parse SQL
+    // ------------------------------------------
+    //  <update id="updateUser">
+    //		update user set name = 'Jerry' where id = #{id}
+    //	</update>
+    //  <select id="selectBlog" parameterType="int" resultType="Blog">
+    //     select * from Blog where id = #{id}
+    //  </select>
+    // ------------------------------------------
+    private void statementElements(List<XNode> list) {
         for (XNode context : list) {
-            XMLStatementBuilder statementParser =
-                    new XMLStatementBuilder(configuration, builderAssistant, context);
+            XMLStatementBuilder statementParser = new XMLStatementBuilder(
+                    configuration, builderAssistant, context);
             statementParser.parseStatementNode();
         }
     }
@@ -97,12 +107,15 @@ public class XMLMapperBuilder extends BaseBuilder {
         resultMapElement(list.get(0));
     }
 
+    // Parse ResultMap
+    // ------------------------------------------
     //    <resultMap id="userResultMap" type="User">
     //      <id property="id" column="user_id" />
     //      <result property="username" column="username"/>
     //      <result property="password" column="password"/>
     //    </resultMap>
-    private ResultMap resultMapElement(XNode resultMapNode) throws Exception {
+    // ------------------------------------------
+    private void resultMapElement(XNode resultMapNode) throws Exception {
         String id = resultMapNode.getStringAttribute("id",
                 resultMapNode.getValueBasedIdentifier());
         String type = resultMapNode.getStringAttribute("type");
@@ -117,18 +130,18 @@ public class XMLMapperBuilder extends BaseBuilder {
             }
             resultMappings.add(buildResultMappingFromContext(resultChild, typeClass, flags));
         }
-
-        ResultMapResolver resultMapResolver = new ResultMapResolver(builderAssistant, id, typeClass, resultMappings);
-        return resultMapResolver.resolve();
+        builderAssistant.addResultMap(id, typeClass, resultMappings);
     }
 
-
-    // 配置sql(定义可重用的 SQL 代码段)
-    // <sql id="userColumns"> id,username,password </sql>
-    private void sqlElement(List<XNode> list) throws Exception {
+    // Parse SQL
+    // ------------------------------------------
+    //   <sql id="userColumns"> id,username,password </sql>
+    // ------------------------------------------
+    private void sqlElements(List<XNode> list) {
         for (XNode context : list) {
             String id = context.getStringAttribute("id");
             id = builderAssistant.applyCurrentNamespace(id, false);
+            /* Avoid SQL fragment coverage */
             if (this.sqlFragments.containsKey(id)) {
                 throw new ParsingException("sqlFragments duplicate id:" + id);
             }
@@ -136,28 +149,21 @@ public class XMLMapperBuilder extends BaseBuilder {
         }
     }
 
+    // Build ResultMapping From XNode Context,
+    // each rows at below is a ResultMapping.
+    // ------------------------------------------
+    //  <id property="id" jdbcType="BIGINT" column="user_id" />
+    //  <result property="username" jdbcType="VARCHAR" column="username"/>
+    // ------------------------------------------
     private ResultMapping buildResultMappingFromContext(XNode context, Class<?> resultType, List<ResultFlag> flags) {
-        //<id property="id" column="author_id"/>
-        //<result property="username" column="author_username"/>
         String property = context.getStringAttribute("property");
         String column = context.getStringAttribute("column");
         String javaType = context.getStringAttribute("javaType");
         String jdbcType = context.getStringAttribute("jdbcType");
-        String typeHandler = context.getStringAttribute("typeHandler");
-        String resulSet = context.getStringAttribute("resultSet");
         Class<?> javaTypeClass = resolveClass(javaType);
-        Class<? extends TypeHandler<?>> typeHandlerClass
-                = (Class<? extends TypeHandler<?>>) resolveClass(typeHandler);
         JdbcType jdbcTypeEnum = resolveJdbcType(jdbcType);
         return builderAssistant.buildResultMapping(
-                resultType,
-                property,
-                column,
-                javaTypeClass,
-                jdbcTypeEnum,
-                typeHandlerClass,
-                flags,
-                resulSet);
+                resultType, property, column, javaTypeClass, jdbcTypeEnum, flags);
     }
 
     private void bindMapperForNamespace() {

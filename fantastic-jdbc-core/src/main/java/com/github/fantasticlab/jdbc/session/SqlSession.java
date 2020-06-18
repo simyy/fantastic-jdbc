@@ -4,6 +4,9 @@ package com.github.fantasticlab.jdbc.session;
 import java.util.List;
 
 
+/**
+ * <code>SqlSession</code> is the main interface for mybatis.
+ */
 public interface SqlSession {
 
     <T> T selectOne(String statement, Object parameter);

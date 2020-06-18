@@ -10,7 +10,7 @@ import com.github.fantasticlab.jdbc.session.Configuration;
 import java.util.Map;
 
 /**
- * 动态SQL源码
+ * DynamicSqlSource is
  */
 public class DynamicSqlSource implements SqlSource {
 

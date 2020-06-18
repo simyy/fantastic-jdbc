@@ -4,34 +4,36 @@ import com.github.fantasticlab.jdbc.session.Configuration;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.*;
 
+/**
+ * Use Factory Pattern to implement a {@code DataSourceFactory},
+ * which can get a {@code UnpooledDataSource}.
+ */
 public class UnpooledDataSourceFactory implements DataSourceFactory {
 
     protected UnpooledDataSource dataSource;
 
+    protected Properties driverProperties;
+
     private static final String PROPS_PREFIX = "db.";
 
-    public UnpooledDataSourceFactory() {
+    public UnpooledDataSourceFactory(Configuration configuration, Properties xmlProperties) throws SQLException {
         dataSource = new UnpooledDataSource();
-    }
-
-    public UnpooledDataSourceFactory(Configuration configuration) throws SQLException {
-        dataSource = new UnpooledDataSource();
-        Properties properties = configuration.getVariables();
-        Properties driverProperties = new Properties();
-        for (Object key : properties.keySet()) {
-            String propertyName = (String) key;
-            if (propertyName.startsWith(PROPS_PREFIX)) {
-                String value = properties.getProperty(propertyName);
-                driverProperties.setProperty(propertyName.substring(PROPS_PREFIX.length()), value);
+        driverProperties = new Properties();
+        /* First priority is xml config, then global config */
+        if (xmlProperties == null) {
+            Properties properties = configuration.getVariables();
+            for (Object key : properties.keySet()) {
+                String propertyName = (String) key;
+                if (propertyName.startsWith(PROPS_PREFIX)) {
+                    String value = properties.getProperty(propertyName);
+                    driverProperties.setProperty(propertyName.substring(PROPS_PREFIX.length()), value);
+                }
             }
+        } else {
+            driverProperties = xmlProperties;
         }
-        setProperties(driverProperties);
-    }
-
-    @Override
-    public void setProperties(Properties driverProperties) throws SQLException {
         dataSource.setProperties(driverProperties);
     }
 

@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * XPath解析器
+ * @author Clinton Begin
  */
 public class XPathParser {
 

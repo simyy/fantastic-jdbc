@@ -8,6 +8,11 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * MapperProxyFactory is a instance factory,
+ * which use <strong>JDK dynamic proxy</strong> to invoke the mapping sql.
+ * @param <T> The interface of Mapper.class.
+ */
 @Data
 public class MapperProxyFactory<T> {
 

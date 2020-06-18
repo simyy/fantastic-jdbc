@@ -7,6 +7,20 @@ import com.github.fantasticlab.jdbc.xml.XMLMapperBuilder;
 
 import java.util.*;
 
+/**
+ * Mapper Registry is a sql mapping storage.
+ * <strong>knownMappers</strong> is a map,
+ * which key is the interface of mapper such as,
+ * --------------------------------
+ *  public interface UserMapper {
+ *      Long insert(User user);
+ *      User getUser(Long id);
+ *      List<User> getAll();
+ *      void updateUser(Long id);
+ *  }
+ * --------------------------------
+ *  and value is {@code MapperProxyFactory}.
+ */
 public class MapperRegistry {
 
     private Configuration config;
@@ -21,11 +35,7 @@ public class MapperRegistry {
         if (mapperProxyFactory == null) {
             throw new BindingException("Type " + type + " is not known to the MapperRegistry.");
         }
-        try {
-            return mapperProxyFactory.newInstance(sqlSession);
-        } catch (Exception e) {
-            throw new BindingException("Error getting mapper instance. Cause: " + e, e);
-        }
+        return mapperProxyFactory.newInstance(sqlSession);
     }
   
     public <T> boolean hasMapper(Class<T> type) {
@@ -38,16 +48,14 @@ public class MapperRegistry {
                 throw new BindingException("Type " + type + " is already known to the MapperRegistry.");
             }
             knownMappers.put(type, new MapperProxyFactory<T>(type));
+        } else {
+            throw new BindingException("Type " + type + " is unable to load because of not interface");
         }
-    }
 
-
-    public Collection<Class<?>> getMappers() {
-        return Collections.unmodifiableCollection(knownMappers.keySet());
     }
 
     public void addMappers(String packageName, Class<?> superType) {
-        // 查找packageName包下所有是superType的类
+        /* Scan all the class which has a superType from a target package */
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<Class<?>>();
         resolverUtil.find(new ResolverUtil.IsA(superType), packageName);
         Set<Class<? extends Class<?>>> mapperSet = resolverUtil.getClasses();
@@ -58,6 +66,7 @@ public class MapperRegistry {
 
 
     public void addMappers(String packageName) {
+        /* The param of Object.class is used to scan all the class from the mapper package. */
         addMappers(packageName, Object.class);
     }
   

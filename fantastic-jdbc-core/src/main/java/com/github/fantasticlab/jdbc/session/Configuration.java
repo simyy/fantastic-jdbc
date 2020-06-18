@@ -23,27 +23,38 @@ import com.github.fantasticlab.jdbc.transaction.Transaction;
 import com.github.fantasticlab.jdbc.transaction.type.JdbcType;
 import com.github.fantasticlab.jdbc.transaction.type.TypeAliasRegistry;
 import com.github.fantasticlab.jdbc.transaction.type.TypeHandlerRegistry;
-import com.github.fantasticlab.jdbc.xml.ResultMapResolver;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
 import lombok.Data;
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
+/**
+ * Configuration is the core component in fantastic-jdbc,
+ * which contains all the config,
+ * such as {@code MapperRegistry}, {@code DataSource} and so on.
+ */
 @Data
 public class Configuration {
 
-//    protected static Properties PROPS = new Properties();
+    /* Global Variables */
+    protected Properties variables = new Properties();
+
+    /* The Scanner and Storage of Mapper Interface */
+    protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
+
+    /* SQL Fragment Storage in Mapper.xml, which is imported by include in a SQL */
+    protected final Map<String, XNode> sqlFragments = new HashMap<>();
+
+    /* Mapped Statement Storage */
+    protected Map<String, MappedStatement> mappedStatements = new HashMap<>();
+
 
     // 对象工厂
     protected ObjectFactory objectFactory = new DefaultObjectFactory();
     // 对象包装器工厂
     protected ObjectWrapperFactory objectWrapperFactory = new DefaultObjectWrapperFactory();
 
-    // Mapper注册器
-    protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
     // 类型关联注册器
     protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
     // 类型处理注册器
@@ -63,15 +74,36 @@ public class Configuration {
     private DataSource dataSource;
     protected Integer defaultStatementTimeout;
 
-    // SQL片段（include）
-    protected final Map<String, XNode> sqlFragments = new HashMap<>();
-    // Mapper语句
-    protected Map<String, MappedStatement> mappedStatements = new HashMap<>();
-    // 已加载资源
-    protected final Set<String> loadedResources = new HashSet<String>();
-    // 所有变量
-    protected Properties variables = new Properties();
     protected JdbcType jdbcTypeForNull = JdbcType.OTHER;
+
+
+
+
+    public void addVariables(Properties properties) {
+        if (properties == null) {
+            return;
+        }
+        variables.putAll(properties);
+    }
+
+    public <T> void addMapper(Class<T> type) {
+        mapperRegistry.addMapper(type);
+    }
+
+    public void addMappers(String packageName) {
+        mapperRegistry.addMappers(packageName);
+    }
+
+    public void addMappedStatement(MappedStatement ms) {
+        mappedStatements.put(ms.getId(), ms);
+    }
+
+
+
+
+
+
+
 
     public StatementHandler newStatementHandler(Executor executor,
                                                 MappedStatement mappedStatement,
@@ -128,14 +160,6 @@ public class Configuration {
         return executor;
     }
 
-    public <T> void addMapper(Class<T> type) {
-        mapperRegistry.addMapper(type);
-    }
-
-    public void addMappers(String packageName) {
-        mapperRegistry.addMappers(packageName);
-    }
-
     public void addParameterMap(ParameterMap pm) {
         parameterMaps.put(pm.getId(), pm);
     }
@@ -154,14 +178,6 @@ public class Configuration {
 
     public void addResultMap(ResultMap rm) {
         resultMaps.put(rm.getId(), rm);
-    }
-
-    public void addMappedStatement(MappedStatement ms) {
-        mappedStatements.put(ms.getId(), ms);
-    }
-
-    public void addLoadedResource(String resource) {
-        loadedResources.add(resource);
     }
 
     public MetaObject newMetaObject(Object object) {

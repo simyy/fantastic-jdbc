@@ -22,7 +22,9 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 
 /**
- * 通过classloader来加载资源
+ * A class to simplify access to resources through the classloader.
+ *
+ * @author Clinton Begin
  */
 public class Resources {
 

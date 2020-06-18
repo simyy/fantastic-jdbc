@@ -1,7 +1,6 @@
 package com.github.fantasticlab.jdbc.datasource;
 
 import com.github.fantasticlab.jdbc.io.Resources;
-import lombok.Data;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -12,9 +11,13 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+/**
+ * UnpooledDataSource is a implement of {@code DataSource}.
+ * Use {@code DriverManager.getDrivers()} to load JDBC drivers,
+ * and {@code initializeDriver} will be invoked in {@code setProperties}.
+ */
 public class UnpooledDataSource implements DataSource {
 
-    private ClassLoader driverClassLoader;
     private Properties driverProperties;
     private static Map<String, Driver> registeredDrivers = new ConcurrentHashMap<String, Driver>();
 
@@ -104,17 +107,11 @@ public class UnpooledDataSource implements DataSource {
 
     private synchronized void initializeDriver() throws SQLException {
         if (!registeredDrivers.containsKey(driver)) {
-            Class<?> driverType;
             try {
-                if (driverClassLoader != null) {
-                    driverType = Class.forName(driver, true, driverClassLoader);
-                } else {
-                    driverType = Resources.classForName(driver);
-                }
+                Class<?> driverType = Resources.classForName(driver);
                 // DriverManager requires the driver to be loaded via the system ClassLoader.
                 // http://www.kfu.com/~nsayer/Java/dyn-jdbc.html
                 Driver driverInstance = (Driver)driverType.newInstance();
-//                DriverManager.registerDriver(new DriverProxy(driverInstance));
                 DriverManager.registerDriver(driverInstance);
                 registeredDrivers.put(driver, driverInstance);
             } catch (Exception e) {

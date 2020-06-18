@@ -28,8 +28,6 @@ import java.util.List;
 
 /**
  * Provides a very simple API for accessing resources within an application server.
- * 虚拟文件系统(VFS),用来读取服务器里的资源
- *
  * @author Ben Gunter
  */
 @Slf4j

@@ -7,6 +7,9 @@ import com.github.fantasticlab.jdbc.mapping.SqlSource;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
 
+/**
+ * LanguageDriver is to resolve SQL configuration.
+ */
 public interface LanguageDriver {
 
     ParameterHandler createParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql);

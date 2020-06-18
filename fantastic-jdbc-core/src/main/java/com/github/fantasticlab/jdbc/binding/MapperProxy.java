@@ -1,6 +1,5 @@
 package com.github.fantasticlab.jdbc.binding;
 
-
 import com.github.fantasticlab.jdbc.session.SqlSession;
 
 import java.io.Serializable;
@@ -8,6 +7,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+/**
+ * MapperProxy is a implement of {@code InvocationHandler}.
+ *
+ * @param <T> the interface of Mapper.class
+ */
 public class MapperProxy<T> implements InvocationHandler, Serializable {
 
     private final SqlSession sqlSession;

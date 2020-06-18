@@ -21,7 +21,6 @@ public final class MappedStatement {
     private Configuration configuration;
     private String id;
     private StatementType statementType;
-    //SQL源码
     private SqlSource sqlSource;
     private ParameterMap parameterMap;
     private List<ResultMap> resultMaps;
@@ -39,7 +38,7 @@ public final class MappedStatement {
             mappedStatement.configuration = configuration;
             mappedStatement.id = id;
             mappedStatement.sqlSource = sqlSource;
-            mappedStatement.statementType = StatementType.PREPARED; // todo
+            mappedStatement.statementType = StatementType.PREPARED;
             mappedStatement.parameterMap =
                     new ParameterMap.Builder(
                             "defaultParameterMap",

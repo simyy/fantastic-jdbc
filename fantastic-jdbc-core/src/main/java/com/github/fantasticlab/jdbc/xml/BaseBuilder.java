@@ -107,18 +107,6 @@ public abstract class BaseBuilder {
         }
     }
 
-    protected TypeHandler<?> resolveTypeHandler(Class<?> javaType, String typeHandlerAlias) {
-        if (typeHandlerAlias == null) {
-            return null;
-        }
-        Class<?> type = resolveClass(typeHandlerAlias);
-        if (type != null && !TypeHandler.class.isAssignableFrom(type)) {
-            throw new ParsingException("Type " + type.getName() + " is not a valid TypeHandler because it does not implement TypeHandler interface");
-        }
-        Class<? extends TypeHandler<?>> typeHandlerType = (Class<? extends TypeHandler<?>>) type;
-        return resolveTypeHandler(javaType, typeHandlerType);
-    }
-
     protected TypeHandler<?> resolveTypeHandler(Class<?> javaType, Class<? extends TypeHandler<?>> typeHandlerType) {
         if (typeHandlerType == null) {
             return null;
