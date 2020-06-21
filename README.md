@@ -1,5 +1,9 @@
 # Fantastic-JDBC
 
+[![Build Status](https://travis-ci.org/fantasticlab/fantastic-jdbc.svg?branch=master)](https://travis-ci.org/fantasticlab/fantastic-jdbc)
+![JDK](https://img.shields.io/badge/jdk-openjdk8-9cf)
+![GitHub](https://img.shields.io/github/license/fantasticlab/fantastic-jdbc)
+
 `Fantastic-JDBC` is a simplified ORM for learning, which is based on `MyBatis`.
 
 ## Architecture
