@@ -1,15 +1,14 @@
 package com.github.fantasticlab.jdbc.session;
 
 
-import com.github.fantasticlab.jdbc.session.defaults.DefaultSqlSessionFactory;
 import com.github.fantasticlab.jdbc.xml.XMLConfigBuilder;
 
 import java.io.InputStream;
 
 /**
- * Use Builder Pattern to build a <code>SqlSessionFactory</code>.
+ * Use Builder Pattern to build a <code>SqlSessionFactory1</code>.
  *
- * <code>SqlSessionFactory</code> provide two load way for XML config:
+ * <code>SqlSessionFactory1</code> provide two load way for XML config:
  * 1. build from resource;
  * 2. build from inputStream;
  *
@@ -25,7 +24,7 @@ public class SqlSessionFactoryBuilder {
     public static SqlSessionFactory build(InputStream inputStream) {
         XMLConfigBuilder parser = new XMLConfigBuilder(inputStream);
         /* XMLConfigBuilder.parseConfiguration() is used to parse the xml config. */
-        return new DefaultSqlSessionFactory(parser.parseConfiguration());
+        return new SqlSessionFactory(parser.parseConfiguration());
     }
 
     public static void main(String[] args) {

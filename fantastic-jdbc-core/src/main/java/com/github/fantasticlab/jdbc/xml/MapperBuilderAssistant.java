@@ -1,8 +1,8 @@
 package com.github.fantasticlab.jdbc.xml;
 
-import com.github.fantasticlab.jdbc.executor.keygen.KeyGenerator;
-import com.github.fantasticlab.jdbc.mapping.*;
-import com.github.fantasticlab.jdbc.reflection.MetaClass;
+import com.github.fantasticlab.jdbc.executor.key.KeyGenerator;
+import com.github.fantasticlab.jdbc.executor.mapping.*;
+import com.github.fantasticlab.jdbc.util.reflection.MetaClass;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.executor.type.JdbcType;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
@@ -60,12 +60,11 @@ public class MapperBuilderAssistant extends BaseBuilder {
         return currentNamespace + "." + base;
     }
 
-    public ResultMap addResultMap(String id, Class<?> type, List<ResultMapping> resultMappings) {
+    public void addResultMap(String id, Class<?> type, List<ResultMapping> resultMappings) {
         id = applyCurrentNamespace(id, false);
         ResultMap.Builder resultMapBuilder = new ResultMap.Builder(id, type, resultMappings);
         ResultMap resultMap = resultMapBuilder.build();
         configuration.addResultMap(resultMap);
-        return resultMap;
     }
 
     public void addMappedStatement(String id,

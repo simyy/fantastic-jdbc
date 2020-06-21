@@ -1,15 +1,13 @@
 package com.github.fantasticlab.jdbc.xml;
 
-import com.github.fantasticlab.jdbc.executor.keygen.KeyGenerator;
-import com.github.fantasticlab.jdbc.executor.keygen.NoKeyGenerator;
-import com.github.fantasticlab.jdbc.mapping.*;
+import com.github.fantasticlab.jdbc.executor.key.NoKeyGenerator;
+import com.github.fantasticlab.jdbc.executor.mapping.*;
 import com.github.fantasticlab.jdbc.scripting.LanguageDriver;
 import com.github.fantasticlab.jdbc.scripting.XMLLanguageDriver;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;
 
-import java.util.List;
 import java.util.Locale;
 
 /**

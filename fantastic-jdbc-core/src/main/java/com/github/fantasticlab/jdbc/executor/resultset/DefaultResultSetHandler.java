@@ -2,12 +2,7 @@ package com.github.fantasticlab.jdbc.executor.resultset;
 
 
 import com.github.fantasticlab.jdbc.exceptions.ResultSetException;
-import com.github.fantasticlab.jdbc.executor.Executor;
-import com.github.fantasticlab.jdbc.executor.parameter.ParameterHandler;
-import com.github.fantasticlab.jdbc.mapping.*;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
-import com.github.fantasticlab.jdbc.session.RowBounds;
-import com.github.fantasticlab.jdbc.test.bean.User;
+import com.github.fantasticlab.jdbc.executor.mapping.*;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;

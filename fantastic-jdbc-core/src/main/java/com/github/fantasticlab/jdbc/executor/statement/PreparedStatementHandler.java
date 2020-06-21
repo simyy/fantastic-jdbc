@@ -1,10 +1,9 @@
 package com.github.fantasticlab.jdbc.executor.statement;
 
 import com.github.fantasticlab.jdbc.executor.Executor;
-import com.github.fantasticlab.jdbc.mapping.BoundSql;
-import com.github.fantasticlab.jdbc.mapping.MappedStatement;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
-import com.github.fantasticlab.jdbc.session.RowBounds;
+import com.github.fantasticlab.jdbc.executor.mapping.BoundSql;
+import com.github.fantasticlab.jdbc.executor.mapping.MappedStatement;
+import com.github.fantasticlab.jdbc.executor.mapping.RowBounds;
 
 import java.sql.*;
 import java.util.List;
@@ -16,10 +15,9 @@ public class PreparedStatementHandler extends BaseStatementHandler {
                                     MappedStatement mappedStatement,
                                     Object parameterObject,
                                     RowBounds rowBounds,
-                                    ResultHandler resultHandler,
                                     BoundSql boundSql) {
 
-        super(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+        super(executor, mappedStatement, parameterObject, rowBounds, boundSql);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
     }
 
     @Override
-    public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
+    public <E> List<E> query(Statement statement) throws SQLException {
         PreparedStatement ps = (PreparedStatement) statement;
         ResultSet rs = ps.executeQuery();
         return resultSetHandler.<E> handleResultSets(ps);

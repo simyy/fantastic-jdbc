@@ -16,7 +16,7 @@
 
 package com.github.fantasticlab.jdbc.scripting.xmltags;
 
-import com.github.fantasticlab.jdbc.io.Resources;
+import com.github.fantasticlab.jdbc.util.io.Resources;
 import ognl.ClassResolver;
 
 import java.util.HashMap;

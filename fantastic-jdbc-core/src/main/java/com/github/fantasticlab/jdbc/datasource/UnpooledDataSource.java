@@ -1,6 +1,6 @@
 package com.github.fantasticlab.jdbc.datasource;
 
-import com.github.fantasticlab.jdbc.io.Resources;
+import com.github.fantasticlab.jdbc.util.io.Resources;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;

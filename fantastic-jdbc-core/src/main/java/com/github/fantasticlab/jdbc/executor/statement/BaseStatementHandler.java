@@ -2,14 +2,13 @@ package com.github.fantasticlab.jdbc.executor.statement;
 
 
 import com.github.fantasticlab.jdbc.executor.Executor;
-import com.github.fantasticlab.jdbc.executor.ExecutorException;
+import com.github.fantasticlab.jdbc.exceptions.ExecutorException;
 import com.github.fantasticlab.jdbc.executor.parameter.ParameterHandler;
 import com.github.fantasticlab.jdbc.executor.resultset.ResultSetHandler;
-import com.github.fantasticlab.jdbc.mapping.BoundSql;
-import com.github.fantasticlab.jdbc.mapping.MappedStatement;
+import com.github.fantasticlab.jdbc.executor.mapping.BoundSql;
+import com.github.fantasticlab.jdbc.executor.mapping.MappedStatement;
 import com.github.fantasticlab.jdbc.session.Configuration;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
-import com.github.fantasticlab.jdbc.session.RowBounds;
+import com.github.fantasticlab.jdbc.executor.mapping.RowBounds;
 import lombok.Data;
 
 import java.sql.Connection;
@@ -35,7 +34,6 @@ public abstract class BaseStatementHandler implements StatementHandler {
                                    MappedStatement mappedStatement,
                                    Object parameterObject,
                                    RowBounds rowBounds,
-                                   ResultHandler resultHandler,
                                    BoundSql boundSql) {
 
         this.configuration = mappedStatement.getConfiguration();
@@ -44,8 +42,8 @@ public abstract class BaseStatementHandler implements StatementHandler {
         this.rowBounds = rowBounds;
         this.boundSql = boundSql;
 
-        this.parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
-        this.resultSetHandler = configuration.newResultSetHandler(mappedStatement);
+        this.parameterHandler = configuration.FACTORY.newParameterHandler(mappedStatement, parameterObject, boundSql);
+        this.resultSetHandler = configuration.FACTORY.newResultSetHandler(mappedStatement);
     }
 
     @Override

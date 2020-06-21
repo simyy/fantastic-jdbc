@@ -1,13 +1,11 @@
 package com.github.fantasticlab.jdbc.scripting;
 
-import com.github.fantasticlab.jdbc.mapping.BoundSql;
-import com.github.fantasticlab.jdbc.mapping.SqlSource;
-import com.github.fantasticlab.jdbc.mapping.SqlSourceBuilder;
+import com.github.fantasticlab.jdbc.executor.mapping.BoundSql;
+import com.github.fantasticlab.jdbc.executor.mapping.SqlSource;
+import com.github.fantasticlab.jdbc.executor.mapping.SqlSourceBuilder;
 import com.github.fantasticlab.jdbc.scripting.xmltags.DynamicContext;
 import com.github.fantasticlab.jdbc.scripting.xmltags.SqlNode;
 import com.github.fantasticlab.jdbc.session.Configuration;
-
-import java.util.HashMap;
 
 /**
  * RawSqlSource is a static sql source,

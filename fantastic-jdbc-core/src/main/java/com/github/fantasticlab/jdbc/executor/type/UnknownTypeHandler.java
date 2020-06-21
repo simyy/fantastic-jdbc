@@ -1,6 +1,6 @@
 package com.github.fantasticlab.jdbc.executor.type;
 
-import com.github.fantasticlab.jdbc.io.Resources;
+import com.github.fantasticlab.jdbc.util.io.Resources;
 
 import java.sql.*;
 import java.util.HashMap;

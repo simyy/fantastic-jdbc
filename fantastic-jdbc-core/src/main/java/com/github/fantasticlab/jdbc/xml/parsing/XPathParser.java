@@ -15,7 +15,7 @@
  */
 package com.github.fantasticlab.jdbc.xml.parsing;
 
-import com.github.fantasticlab.jdbc.io.Resources;
+import com.github.fantasticlab.jdbc.util.io.Resources;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

@@ -1,6 +1,6 @@
 package com.github.fantasticlab.jdbc.executor.type;
 
-import com.github.fantasticlab.jdbc.io.ResolverUtil;
+import com.github.fantasticlab.jdbc.util.io.ResolverUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;

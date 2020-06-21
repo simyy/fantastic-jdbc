@@ -1,8 +1,8 @@
 package com.github.fantasticlab.jdbc.executor.type;
 
 
-import com.github.fantasticlab.jdbc.io.ResolverUtil;
-import com.github.fantasticlab.jdbc.io.Resources;
+import com.github.fantasticlab.jdbc.util.io.ResolverUtil;
+import com.github.fantasticlab.jdbc.util.io.Resources;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

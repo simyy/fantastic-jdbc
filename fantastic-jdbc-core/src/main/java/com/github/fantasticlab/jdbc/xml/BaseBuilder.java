@@ -1,6 +1,6 @@
 package com.github.fantasticlab.jdbc.xml;
 
-import com.github.fantasticlab.jdbc.mapping.ParameterMode;
+import com.github.fantasticlab.jdbc.executor.mapping.ParameterMode;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.executor.type.JdbcType;
 import com.github.fantasticlab.jdbc.executor.type.TypeAliasRegistry;

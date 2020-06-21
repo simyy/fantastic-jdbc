@@ -1,8 +1,7 @@
 package com.github.fantasticlab.jdbc.executor.statement;
 
 import com.github.fantasticlab.jdbc.executor.parameter.ParameterHandler;
-import com.github.fantasticlab.jdbc.mapping.BoundSql;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
+import com.github.fantasticlab.jdbc.executor.mapping.BoundSql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,7 +25,7 @@ public interface StatementHandler {
 
     int update(Statement statement) throws SQLException;
 
-    <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException;
+    <E> List<E> query(Statement statement) throws SQLException;
 
     BoundSql getBoundSql();
 

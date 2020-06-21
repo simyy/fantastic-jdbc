@@ -1,9 +1,9 @@
 
 package com.github.fantasticlab.jdbc.xml;
 
-import com.github.fantasticlab.jdbc.io.Resources;
-import com.github.fantasticlab.jdbc.mapping.ResultFlag;
-import com.github.fantasticlab.jdbc.mapping.ResultMapping;
+import com.github.fantasticlab.jdbc.util.io.Resources;
+import com.github.fantasticlab.jdbc.executor.mapping.ResultFlag;
+import com.github.fantasticlab.jdbc.executor.mapping.ResultMapping;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.executor.type.JdbcType;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
@@ -24,7 +24,7 @@ public class XMLMapperBuilder extends BaseBuilder {
     /* Mapper.xml */
     private String resource;
     private XPathParser parser;
-    /* Sql fragment map in Mapper.xml.  Key is id, and value is SQL fragment. */
+    /* Sql fragment map in Mapper.xml.  Key is id, and value is SQL fragment XNode. */
     private Map<String, XNode> sqlFragments;
     private MapperBuilderAssistant builderAssistant;
 
@@ -133,7 +133,7 @@ public class XMLMapperBuilder extends BaseBuilder {
         builderAssistant.addResultMap(id, typeClass, resultMappings);
     }
 
-    // Parse SQL
+    // Parse SQL Fragment
     // ------------------------------------------
     //   <sql id="userColumns"> id,username,password </sql>
     // ------------------------------------------

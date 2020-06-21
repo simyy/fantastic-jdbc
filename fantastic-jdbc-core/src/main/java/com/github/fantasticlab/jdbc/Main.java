@@ -1,6 +1,5 @@
 package com.github.fantasticlab.jdbc;
 
-import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.session.SqlSession;
 import com.github.fantasticlab.jdbc.session.SqlSessionFactory;
 import com.github.fantasticlab.jdbc.session.SqlSessionFactoryBuilder;
@@ -11,7 +10,6 @@ import java.util.List;
 
 /**
  * Hello world!
- *
  */
 public class Main {
 

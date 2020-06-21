@@ -2,7 +2,7 @@ package com.github.fantasticlab.jdbc.xml;
 
 import com.github.fantasticlab.jdbc.datasource.DataSourceFactory;
 import com.github.fantasticlab.jdbc.datasource.UnpooledDataSourceFactory;
-import com.github.fantasticlab.jdbc.io.Resources;
+import com.github.fantasticlab.jdbc.util.io.Resources;
 import com.github.fantasticlab.jdbc.session.Configuration;
 import com.github.fantasticlab.jdbc.xml.parsing.ParsingException;
 import com.github.fantasticlab.jdbc.xml.parsing.XNode;

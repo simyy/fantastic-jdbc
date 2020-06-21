@@ -2,13 +2,12 @@ package com.github.fantasticlab.jdbc.executor.statement;
 
 
 import com.github.fantasticlab.jdbc.executor.Executor;
-import com.github.fantasticlab.jdbc.executor.keygen.KeyGenerator;
+import com.github.fantasticlab.jdbc.executor.key.KeyGenerator;
 import com.github.fantasticlab.jdbc.executor.resultset.DefaultResultSetHandler;
 import com.github.fantasticlab.jdbc.executor.resultset.ResultSetHandler;
-import com.github.fantasticlab.jdbc.mapping.BoundSql;
-import com.github.fantasticlab.jdbc.mapping.MappedStatement;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
-import com.github.fantasticlab.jdbc.session.RowBounds;
+import com.github.fantasticlab.jdbc.executor.mapping.BoundSql;
+import com.github.fantasticlab.jdbc.executor.mapping.MappedStatement;
+import com.github.fantasticlab.jdbc.executor.mapping.RowBounds;
 import com.github.fantasticlab.jdbc.test.bean.User;
 
 import java.sql.*;
@@ -22,9 +21,8 @@ public class SimpleStatementHandler extends BaseStatementHandler {
                                   MappedStatement mappedStatement,
                                   Object parameter,
                                   RowBounds rowBounds,
-                                  ResultHandler resultHandler,
                                   BoundSql boundSql) {
-        super(executor, mappedStatement, parameter, rowBounds, resultHandler, boundSql);
+        super(executor, mappedStatement, parameter, rowBounds, boundSql);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class SimpleStatementHandler extends BaseStatementHandler {
     }
 
     @Override
-    public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
+    public <E> List<E> query(Statement statement) throws SQLException {
         String sql = boundSql.getSql();
         statement.execute(sql);
         return resultSetHandler.<E>handleResultSets(statement);

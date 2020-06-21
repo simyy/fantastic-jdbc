@@ -2,10 +2,9 @@ package com.github.fantasticlab.jdbc.executor.statement;
 
 import com.github.fantasticlab.jdbc.executor.Executor;
 import com.github.fantasticlab.jdbc.executor.parameter.ParameterHandler;
-import com.github.fantasticlab.jdbc.mapping.BoundSql;
-import com.github.fantasticlab.jdbc.mapping.MappedStatement;
-import com.github.fantasticlab.jdbc.session.ResultHandler;
-import com.github.fantasticlab.jdbc.session.RowBounds;
+import com.github.fantasticlab.jdbc.executor.mapping.BoundSql;
+import com.github.fantasticlab.jdbc.executor.mapping.MappedStatement;
+import com.github.fantasticlab.jdbc.executor.mapping.RowBounds;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,17 +19,16 @@ public class RoutingStatementHandler implements StatementHandler {
                                    MappedStatement ms,
                                    Object parameter,
                                    RowBounds rowBounds,
-                                   ResultHandler resultHandler,
                                    BoundSql boundSql) {
 
         switch (ms.getStatementType()) {
             case STATEMENT:
                 delegate = new SimpleStatementHandler(
-                        executor, ms, parameter, rowBounds, resultHandler, boundSql);
+                        executor, ms, parameter, rowBounds, boundSql);
                 break;
             case PREPARED:
                 delegate = new PreparedStatementHandler(
-                        executor, ms, parameter, rowBounds, resultHandler, boundSql);
+                        executor, ms, parameter, rowBounds, boundSql);
                 break;
             default:
                 throw new RuntimeException("Unknown statement type: " + ms.getStatementType());
@@ -59,8 +57,8 @@ public class RoutingStatementHandler implements StatementHandler {
     }
 
     @Override
-    public <E> List<E> query(Statement statement, ResultHandler resultHandler) throws SQLException {
-        return delegate.query(statement, resultHandler);
+    public <E> List<E> query(Statement statement) throws SQLException {
+        return delegate.query(statement);
     }
 
     @Override

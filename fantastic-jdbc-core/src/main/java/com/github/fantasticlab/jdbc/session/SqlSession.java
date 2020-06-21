@@ -1,5 +1,6 @@
 package com.github.fantasticlab.jdbc.session;
 
+import com.github.fantasticlab.jdbc.executor.mapping.RowBounds;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface SqlSession {
 
     <E> List<E> selectList(String statement, Object parameter, RowBounds rowBounds);
 
-    void select(String statement, Object parameter, RowBounds rowBounds, ResultHandler handler);
+    void select(String statement, Object parameter, RowBounds rowBounds);
 
     int update(String statement, Object parameter);
 

@@ -79,9 +79,7 @@ public class ForEachSqlNode implements SqlNode {
                 applyIndex(context, mapEntry.getKey(), uniqueNumber);
                 applyItem(context, mapEntry.getValue(), uniqueNumber);
             } else {
-                //索引
                 applyIndex(context, i, uniqueNumber);
-                //加上一个元素
                 applyItem(context, o, uniqueNumber);
             }
             contents.apply(new FilteredDynamicContext(configuration, context, index, item, uniqueNumber));
@@ -91,7 +89,6 @@ public class ForEachSqlNode implements SqlNode {
             context = oldContext;
             i++;
         }
-        //加上)
         applyClose(context);
         return true;
     }
@@ -126,7 +123,6 @@ public class ForEachSqlNode implements SqlNode {
         return new StringBuilder(ITEM_PREFIX).append(item).append("_").append(i).toString();
     }
 
-    //被过滤的动态上下文
     private static class FilteredDynamicContext extends DynamicContext {
         private DynamicContext delegate;
         private int index;
@@ -179,8 +175,6 @@ public class ForEachSqlNode implements SqlNode {
 
     }
 
-
-    //前缀上下文
     private class PrefixedContext extends DynamicContext {
         private DynamicContext delegate;
         private String prefix;

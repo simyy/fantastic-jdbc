@@ -15,7 +15,7 @@
  */
 package com.github.fantasticlab.jdbc.scripting.xmltags;
 
-import com.github.fantasticlab.jdbc.mapping.SqlSource;
+import com.github.fantasticlab.jdbc.executor.mapping.SqlSource;
 import com.github.fantasticlab.jdbc.scripting.DynamicSqlSource;
 import com.github.fantasticlab.jdbc.scripting.RawSqlSource;
 import com.github.fantasticlab.jdbc.session.Configuration;
